@@ -218,7 +218,8 @@ class AsyncioChannel:
         queue_name = kwargs['queue']
 
         def consumer_callback(*args):
-            queue.put_nowait((self, *args[1:]))
+            args = [self] + args[1:]
+            queue.put_nowait(tuple(args))
 
         kwargs['consumer_callback'] = consumer_callback
         self.__consumers.setdefault(queue_name, set()).add(queue)
